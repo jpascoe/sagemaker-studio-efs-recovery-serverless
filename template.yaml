@@ -1,6 +1,6 @@
 AWSTemplateFormatVersion: '2010-09-09'
 Transform: AWS::Serverless-2016-10-31
-Description: Demo-SageMaker-Studio-EFS-Recovery
+Description: MLOps-SageMaker-Studio-EFS-Recovery
 
 Parameters:
   ############### Scenario Testing Param ####################
@@ -23,11 +23,11 @@ Parameters:
   StepFunctionName:
     Type: String
     Description: name of the Step Function
-    Default: demo-stepfunction
+    Default: smsbackup-stepfunction
   SQSName:
     Type: String
     Description: name of the SQS
-    Default: demo-sqs
+    Default: smsbackup-sqs
   ############### EventApp ####################
   DDBInitialSeed:
     Description: Select ENABLED only if SageMaker Domain isn't deployed along this stack
@@ -60,14 +60,14 @@ Parameters:
     Description: Universal Identifier
     MinLength: 3
     MaxLength: 10
-    Default: demo
+    Default: mlops
   Env:
     Type: String
     Description: Env instance of the resource
     AllowedValues:
       - dev
-      - qa
-      - prd
+      - uat
+      - prod
     Default: dev
   AppName:
     Type: String
@@ -76,14 +76,14 @@ Parameters:
     AllowedPattern: "[a-z][a-z0-9+-=._:/@]*[a-z0-9]"
     ConstraintDescription: Must begin with a lowercase letter and contain only lowercase alphanumeric characters with +-=._:/@
     Description: Name of the application, keep to 15 characters or less
-    Default: myapp
+    Default: smsbackup
 
 Conditions:
   CreateDomainCond: !Equals [ !Ref MODE, 'NOSEED' ]
 
 # Create our resources with separate CloudFormation templates resources:
 Resources:
-  DemoBootstrap:
+  SMSBackupBootstrap:
     Type: AWS::Serverless::Application
     Properties:
       Location: Infrastructure/Templates/ssm.yaml
@@ -96,7 +96,7 @@ Resources:
         AppName: !Ref AppName
   StepFunction:
     Type: AWS::Serverless::Application
-    DependsOn: DemoBootstrap
+    DependsOn: SMSBackupBootstrap
     Properties:
       Location: Infrastructure/Templates/stepfunction.yaml
       Parameters:
@@ -112,7 +112,7 @@ Resources:
       Location: Infrastructure/Templates/event-app.yaml
       Parameters:
         DDBInitialSeed: !Ref DDBInitialSeed
-        LambdaLayerArn: !GetAtt DemoBootstrap.Outputs.LambdaLayerArn
+        LambdaLayerArn: !GetAtt SMSBackupBootstrap.Outputs.LambdaLayerArn
         UID: !Ref UID
         Env: !Ref Env
         AppName: !Ref AppName
@@ -123,7 +123,7 @@ Resources:
     Properties:
       Location: Infrastructure/Templates/sagemaker-studio-domain.yaml
       Parameters:
-        LambdaLayerArn: !GetAtt DemoBootstrap.Outputs.LambdaLayerArn
+        LambdaLayerArn: !GetAtt SMSBackupBootstrap.Outputs.LambdaLayerArn
         UID: !Ref UID
         Env: !Ref Env
         AppName: !Ref AppName
@@ -134,7 +134,7 @@ Resources:
     Properties:
       Location: Infrastructure/Templates/sagemaker-studio-user.yaml
       Parameters:
-        LambdaLayerArn: !GetAtt DemoBootstrap.Outputs.LambdaLayerArn
+        LambdaLayerArn: !GetAtt SMSBackupBootstrap.Outputs.LambdaLayerArn
         StudioUserProfileName: !Ref StudioUserProfileName1
         UID: !Ref UID
         Env: !Ref Env
@@ -146,7 +146,7 @@ Resources:
     Properties:
       Location: Infrastructure/Templates/sagemaker-studio-space.yaml
       Parameters:
-        LambdaLayerArn: !GetAtt DemoBootstrap.Outputs.LambdaLayerArn
+        LambdaLayerArn: !GetAtt SMSBackupBootstrap.Outputs.LambdaLayerArn
         StudioSpaceName: !Ref StudioSpaceName
         UID: !Ref UID
         Env: !Ref Env

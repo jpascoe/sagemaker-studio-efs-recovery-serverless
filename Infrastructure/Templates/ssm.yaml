@@ -21,14 +21,14 @@ Parameters:
     Description: Universal Identifier
     MinLength: 3
     MaxLength: 10
-    Default: demo
+    Default: mlops
   Env:
     Type: String
     Description: Env instance of the resource
     AllowedValues:
       - dev
-      - qa
-      - prd
+      - uat
+      - prod
     Default: dev
   AppName:
     Type: String
@@ -37,7 +37,7 @@ Parameters:
     AllowedPattern: "[a-z][a-z0-9+-=._:/@]*[a-z0-9]"
     ConstraintDescription: Must begin with a lowercase letter and contain only lowercase alphanumeric characters with +-=._:/@
     Description: Name of the application, keep to 15 characters or less
-    Default: test-app
+    Default: smsbackup
 
 Resources:
   ############### VPC ####################

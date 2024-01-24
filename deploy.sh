@@ -50,6 +50,8 @@ echo "#####################################################"
 LIB_DIR=tmp/python
 LAMBDA_LAYER_NAME="boto3-layer"
 mkdir -p $LIB_DIR
+python3.9 -m venv .venv
+source .venv/bin/activate
 pip3 install boto3==1.26.59 -t $LIB_DIR
 cd tmp
 zip -r $LAMBDA_LAYER_NAME.zip .

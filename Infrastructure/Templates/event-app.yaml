@@ -145,8 +145,8 @@ Parameters:
     Description: Env instance of the resource
     AllowedValues:
       - dev
-      - qa
-      - prd
+      - uat
+      - prod
     Default: dev
   AppName:
     Type: String
@@ -541,7 +541,7 @@ Resources:
       cfn_nag:
         rules_to_suppress:
           - id: W58
-            reason: "lambda role arn referened in the resource has permission to write CloudWatch Logs"
+            reason: "lambda role arn referenced in the resource has permission to write CloudWatch Logs"
     Properties:
       FunctionName: !Sub '${UID}-${AppName}-${Env}-initial-seed-processor'
       CodeUri: ../../src/

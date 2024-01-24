@@ -114,8 +114,8 @@ Parameters:
     Description: Env instance of the resource
     AllowedValues:
       - dev
-      - qa
-      - prd
+      - uat
+      - prod
     Default: dev
   AppName:
     Type: String

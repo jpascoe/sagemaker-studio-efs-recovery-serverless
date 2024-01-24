@@ -128,7 +128,7 @@ Our first test scenario assumes you are starting from scratch and want to create
    bash deploy.sh -v <vpc_id> -s <subnet_id> -b <s3_bucket_name> -n <stack_name> -r <aws_region>
    ```
 2. In [AWS CloudFormation Console](https://console.aws.amazon.com/cloudformation/home), ensure the following stacks are in **CREATE_COMPLETE** status:
-      1. `<stack_name>-DemoBootstrap-*`
+      1. `<stack_name>-SMSBackupBootstrap-*`
       2. `<stack_name>-StepFunction-*`
       3. `<stack_name>-EventApp-*`
       4. `<stack_name>-StudioDomain-*`
@@ -156,7 +156,7 @@ Our first test scenario assumes you are starting from scratch and want to create
      Properties:
        Location: Infrastructure/Templates/sagemaker-studio-user.yaml
        Parameters:
-         LambdaLayerArn: !GetAtt DemoBootstrap.Outputs.LambdaLayerArn
+         LambdaLayerArn: !GetAtt SMSBackupBootstrap.Outputs.LambdaLayerArn
          StudioUserProfileName: !Ref StudioUserProfileName1
          UID: !Ref UID
          Env: !Ref Env
@@ -168,7 +168,7 @@ Our first test scenario assumes you are starting from scratch and want to create
      Properties:
        Location: Infrastructure/Templates/sagemaker-studio-space.yaml
        Parameters:
-         LambdaLayerArn: !GetAtt DemoBootstrap.Outputs.LambdaLayerArn
+         LambdaLayerArn: !GetAtt SMSBackupBootstrap.Outputs.LambdaLayerArn
          StudioSpaceName: !Ref StudioSpaceName
          UID: !Ref UID
          Env: !Ref Env
@@ -202,7 +202,7 @@ Our second test scenario assumes you want to use the existing SageMaker domain a
    ```
 2. Check the deployment status.
    1. In [AWS CloudFormation Console](https://console.aws.amazon.com/cloudformation/home), ensure the following stacks are in `CREATE_COMPLETE` status:
-      1. `<stack_name>-DemoBootstrap-*`
+      1. `<stack_name>-SMSBackupBootstrap-*`
       2. `<stack_name>-StepFunction-*`
       3. `<stack_name>-EventApp-*`
 3. If the deployment failed in any of the stacks, check the error and resolve the issues. Then, proceed to the next step only if the problems are resolved.
@@ -248,7 +248,7 @@ Scenario III assumes you want to test the backup and recovery workflow without a
       bash deploy.sh -v <vpc_id> -s <subnet_id> -b <s3_bucket_name> -n <stack_name> -r <aws_region>
       ```
 2. In [AWS CloudFormation Console](https://console.aws.amazon.com/cloudformation/home), ensure the following stacks are in `CREATE_COMPLETE` status:
-      1. `<stack_name>-DemoBootstrap-*`
+      1. `<stack_name>-SMSBackupBootstrap-*`
       2. `<stack_name>-StepFunction-*`
       4. `<stack_name>-StudioDomain-*`
       5. `<stack_name>-StudioUser1-*`
