@@ -58,3 +58,4 @@ ENV/
 env.bak/
 venv.bak/
 Infrastructure/seed.json
+Infrastructure/create-user.json
